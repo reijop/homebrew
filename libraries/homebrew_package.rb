@@ -85,8 +85,7 @@ class Chef
         end
 
         def get_response_from_command(command)
-          output = shell_out!(
-                              :command => command,
+          output = shell_out!(command,
                               :user => ENV['SUDO_USER'],
                               :cwd => "/Users/#{ENV['SUDO_USER']}"
                              )
