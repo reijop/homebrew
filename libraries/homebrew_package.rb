@@ -32,7 +32,7 @@ class Chef
         end
 
         def install_package(name, version)
-          brew_as_user('install', @new_resource.options, name)
+          brew('install', @new_resource.options, name)
         end
 
         def upgrade_package(name, version)
@@ -48,11 +48,6 @@ class Chef
           @new_resource.options = ((@new_resource.options || "") << " --force").strip
           remove_package(name, version)
         end
-
-        protected
-	def run_as
-          user_name = node["homebrew"]["run_as"] || raise(Chef::Exceptions::Homebrew::NoRunAsUser)
-	end
 
 	def brew_as_user(*args)
           get_response_from_command("sudo -u #{run_as} brew #{args.join(' ')}")
@@ -90,7 +85,11 @@ class Chef
         end
 
         def get_response_from_command(command)
-          output = shell_out!(command)
+          output = shell_out!(
+                              :command => command,
+                              :user => ENV['SUDO_USER'],
+                              :cwd => "/Users/#{ENV['SUDO_USER']}"
+                             )
           output.stdout
         end
       end
