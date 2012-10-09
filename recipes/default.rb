@@ -5,7 +5,7 @@ directory "/usr/local" do
 end
 
 execute "install homebrew" do
-    owner ENV['SUDO_USER']
+    user ENV['SUDO_USER']
     group "wheel"
   command "curl -sfL https://github.com/mxcl/homebrew/tarball/master | tar zx -m --strip 1"
   cwd "/usr/local"
@@ -15,7 +15,7 @@ end
 package 'git'
 
 execute "update homebrew from github" do
-    owner ENV['SUDO_USER']
+    user ENV['SUDO_USER']
     group "wheel"
     command "/usr/local/bin/brew update || true"
 end
